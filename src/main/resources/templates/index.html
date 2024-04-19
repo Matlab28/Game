@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+<h2>Rock Paper Scissors Game</h2>
+<p>Choose your move:</p>
+<button onclick="play('rock')">Rock</button>
+<button onclick="play('paper')">Paper</button>
+<button onclick="play('scissors')">Scissors</button>
+<div id="result"></div>
+
+<script>
+    function play(playerChoice) {
+        fetch('http://localhost:8080/play-game', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userAnswer: playerChoice })
+        })
+            .then(response => response.json())
+            .then(data => {
+                data.serverChoice = undefined;
+                document.getElementById('result').innerText = `You chose ${playerChoice}, the server chose ${data.serverChoice}. ${data.result}`;
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+</body>
+</html>
